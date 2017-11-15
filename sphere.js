@@ -36,8 +36,6 @@ var heroMesh =
       ]
     },
 
-
-    
     {
       "name"       : "normal_buffer",
       "size"       : 3,

@@ -41,6 +41,7 @@ var arena;
 var hero;
 var thingSeeking;
 var villain;
+var maze;
 
 var g_matrixStack = []; // Stack for storing a matrix
 
@@ -54,7 +55,7 @@ window.onload = function init(){
     //  Configure WebGL
     
     gl.clearColor( 0.2, 0.2, 0.2, 1.0 );
-
+    
     //  Load shaders and initialize attribute buffers
 
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
@@ -85,7 +86,11 @@ window.onload = function init(){
 
     villain = new Villain(program, (3*ARENASIZE)/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
     villain.init();
-    
+
+    maze = new Maze(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
+    maze.init();
+
+
     render();
 };
 
@@ -110,6 +115,7 @@ function render()
     hero.show();
     thingSeeking.show();
     villain.show();
+    maze.show();
     
     // Overhead viewport 
     var horiz_offset = (width * (1.0 - HERO_VP) / 20.0);
@@ -125,6 +131,7 @@ function render()
     hero.show();
     thingSeeking.show();
     villain.show();
+    maze.show();
 
     requestAnimFrame( render );
 };
@@ -133,26 +140,56 @@ function render()
 
 window.onkeydown = function(event) {
     var key = String.fromCharCode(event.keyCode);
+    var key2 = event.shiftKey;
+    var keyR = String.fromCharCode(event.keyCode);
+    var keyL = String.fromCharCode(event.keyCode);
     // For letters, the upper-case version of the letter is always
     // returned because the shift-key is regarded as a separate key in
     // itself.  Hence upper- and lower-case can't be distinguished.
     switch (key) {
-    case 'B':
-	// Move backward
-	hero.move(-1.0);
+    case 'S':
+    // Move backward
+    if(lp0[0] >= ARENASIZE-5 || lp0[0] <= 5 || lp0[2] <= -ARENASIZE+5 || lp0[2] >= -5){
+        hero.move(0);
+    } else if(key2) {
+        hero.move(-4.0);
+    }
+    else {
+        hero.move(-2.0);
+    }
 	break;
-    case 'F':
-	// Move forward
-	hero.move(1.0);
+    case 'W':
+    // Move forward
+    if(lp0[0] >= ARENASIZE-5 || lp0[0] <= 5 || lp0[2] <= -ARENASIZE+5 || lp0[2] >= -5){
+        hero.move(0);
+    } else if(key2) {
+        hero.move(4.5); 
+    } else {
+        hero.move(2.5);
+    }
+    break;
+    case 'D':
+    // Turn left
+    if(key2) {
+        hero.turn(4.5); 
+        hero.move(1.0); 
+    } else {
+        hero.turn(2.5);
+        hero.move(0.5); 
+    }
 	break;
-    case 'L':
-	// Turn left 
-	hero.turn(1);
-	break;
-    case 'R':
-	// Turn right 
-	hero.turn(-1);
+    case 'A':
+    // Turn right 
+    if(key2) {
+        hero.turn(-4.5);
+        hero.move(-1.0);  
+    } else {
+        hero.turn(-2.5);
+        hero.move(-0.5); 
+    }
 	break;
     }
+    
+    
 };
 

@@ -23,10 +23,11 @@ function Arena () {
         ARENASIZE,0.0,0.0,
         ARENASIZE,0.0,-ARENASIZE,
         0.0,0.0,-ARENASIZE
-    ];
+	];
+	
 
     this.normals = [
-	1.0,0.0,0.0,
+		1.0,0.0,0.0,
         1.0,0.0,0.0,
         1.0,0.0,0.0,
         1.0,0.0,0.0,
