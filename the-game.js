@@ -81,11 +81,11 @@ window.onload = function init(){
     hero = new Hero(program, eyex, 0.0, eyez, 45, 10.0);
     hero.init();
 
-    thingSeeking = new ThingSeeking(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
-    thingSeeking.init();
+    //thingSeeking = new ThingSeeking(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
+    //thingSeeking.init();
 
-    villain = new Villain(program, (3*ARENASIZE)/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
-    villain.init();
+    //villain = new Villain(program, (3*ARENASIZE)/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
+    //villain.init();
 
     maze = new Maze(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
     maze.init();
@@ -113,8 +113,8 @@ function render()
     gl.uniformMatrix4fv( projectionMatrixLoc, false, flatten(projectionMatrix) );
     arena.show();
     hero.show();
-    thingSeeking.show();
-    villain.show();
+    //thingSeeking.show();
+    //villain.show();
     maze.show();
     
     // Overhead viewport 
@@ -129,8 +129,8 @@ function render()
     gl.uniformMatrix4fv( projectionMatrixLoc, false, flatten(projectionMatrix) );
     arena.show();
     hero.show();
-    thingSeeking.show();
-    villain.show();
+    //thingSeeking.show();
+    //villain.show();
     maze.show();
 
     requestAnimFrame( render );
