@@ -32,6 +32,7 @@ const blue = [ 0.0,0.0,1.0, 1.0 ]; // pure blue
 const green = [ 0.0,1.0,0.0, 1.0 ]; // pure blue 
 const yellow = [ 1.0,1.0,0.0, 1.0 ]; // pure yellow
 
+
 var modelViewMatrix, projectionMatrix;
 var modelViewMatrixLoc, projectionMatrixLoc;
 
@@ -63,22 +64,27 @@ window.onload = function init(){
 
     eyex  = ARENASIZE/2.0;	// Where the hero starts
     eyez  =  -ARENASIZE/2.0;
-    aspect=width/height;
+    aspect= width/height;
 
     modelViewMatrixLoc = gl.getUniformLocation( program, "modelViewMatrix" );
     projectionMatrixLoc = gl.getUniformLocation( program, "projectionMatrix" );
 
-    gl.uniform1i(gl.getUniformLocation(program, "texture_flag"),
-		 0); // Assume no texturing is the default used in
+    //gl.uniform1i(gl.getUniformLocation(program, "texture_flag"),
+		// 0); // Assume no texturing is the default used in
                      // shader.  If your game object uses it, be sure
                      // to switch it back to 0 for consistency with
                      // those objects that use the defalt.
     
     
+
+
+    
+
+
     arena = new Arena(program);
     arena.init();
 
-    hero = new Hero(program, eyex, 0.0, eyez, 45, 10.0);
+    hero = new Hero(program, eyex, 0.0, eyez-30, -10, 10.0);
     hero.init();
 
     //thingSeeking = new ThingSeeking(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
@@ -120,7 +126,7 @@ function render()
     // Overhead viewport 
     var horiz_offset = (width * (1.0 - HERO_VP) / 20.0);
     gl.viewport( vp1_left + (HERO_VP * width) + horiz_offset ,
-		 vp1_bottom, 18 * horiz_offset, height );
+		 vp1_bottom, 18 * horiz_offset, height ); /// the other window on the right 
     modelViewMatrix = lookAt(  vec3(500.0,100.0,-500.0),
 			       vec3(500.0,0.0,-500.0),
 			       vec3(0.0,0.0,-1.0) );
@@ -150,7 +156,8 @@ window.onkeydown = function(event) {
     case 'S':
     // Move backward
     if(lp0[0] >= ARENASIZE-5 || lp0[0] <= 5 || lp0[2] <= -ARENASIZE+5 || lp0[2] >= -5){
-        hero.move(0);
+        //hero.move(0);
+        hero.move(-4.5); 
     } else if(key2) {
         hero.move(-4.0);
     }
@@ -162,10 +169,9 @@ window.onkeydown = function(event) {
     // Move forward
     if(lp0[0] >= ARENASIZE-5 || lp0[0] <= 5 || lp0[2] <= -ARENASIZE+5 || lp0[2] >= -5){
         hero.move(0);
-    } else if(key2) {
-        hero.move(4.5); 
+         
     } else {
-        hero.move(2.5);
+        mapMovement('W', key2);
     }
     break;
     case 'D':
@@ -193,3 +199,51 @@ window.onkeydown = function(event) {
     
 };
 
+function mapMovement(keyEvent,event) {
+    var xAxis = [0,73,144,213,284,290,358,421,501,568,643,646,715,717,785,858,927,928,1000];
+    var zAxis = [0,-82,-159,-237,-315,-392,-394,-474,-549,-622,-705,-785,-861,-863,-938,-1000];
+    var heroXis = lp0[0];
+    var heroZis = lp0[2];
+    var element = keyEvent;
+    var key2 = event;
+    
+    if(element == 'W'){
+        
+        if(heroZis < 0 && heroZis > -85 && heroXis < 505){//bottom left block movement
+            hero.move(0); 
+        } else {
+            hero.move(5);
+        }
+    } else {
+        hero.move(5);
+    } 
+    /*else if(element == 'W' && key2){
+        for(var i = 0; i < xAxis.length; i++){
+            if(heroXis <= xAxis[i]){
+                for(var j = 0; j < zAxis.length; j++){
+                    if(heroZis >= zAxis[j]){
+                        hero.move(5); 
+                        break;
+                    } else {
+                        hero.move(0); 
+                        break;
+                    }
+                }
+                break;
+            } else if(heroXis > xAxis[i]){
+                for(var j = 0; j < zAxis.length; j++){
+                    if(heroZis > zAxis[j]){
+                        hero.move(0); 
+                        break;
+                    } else {
+                        hero.move(0);
+                        break; 
+                    }
+                }
+                break;
+            }
+        }
+    }*/
+
+
+}

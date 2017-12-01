@@ -105,7 +105,7 @@ function Arena () {
 	gl.drawArrays(gl.TRIANGLE_FAN, 12, 4);
 
 	ambientProduct = mult(la0, blue);
-	//	ambientProduct = mult(vec4(1.0,1.0,1.0,1.0), blue);
+	//ambientProduct = mult(vec4(1.0,1.0,1.0,1.0), blue);
 	diffuseProduct = mult(ld0, blue);
 	specularProduct = mult(ls0, blue);
 	
@@ -114,7 +114,7 @@ function Arena () {
 	gl.uniform4fv(gl.getUniformLocation(program, "diffuseProduct"),
 		      flatten(diffuseProduct) );
 	gl.uniform4fv(gl.getUniformLocation(program, "specularProduct"), 
-		      flatten(specularProduct) );	
+			  flatten(specularProduct) );	
 	
 	gl.drawArrays(gl.TRIANGLE_FAN, 16, 4);
 	// IMPORTANT: Disable current vertex attribute arrays so those in
