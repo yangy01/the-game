@@ -46,6 +46,8 @@ var maze;
 
 var g_matrixStack = []; // Stack for storing a matrix
 
+var start = 1;
+
 window.onload = function init(){
     canvas = document.getElementById( "gl-canvas" );
     
@@ -62,8 +64,15 @@ window.onload = function init(){
     program = initShaders( gl, "vertex-shader", "fragment-shader" );
     gl.useProgram( program );
 
-    eyex  = ARENASIZE/2.0;	// Where the hero starts
-    eyez  =  -ARENASIZE/2.0;
+    if(start == 1){
+        eyex  = ARENASIZE/2.0;	// Where the hero starts
+        eyez  =  -ARENASIZE/2.0;
+        start = 0;
+    } else if(start == 2){
+        eyex  = 927;	// Where the hero starts
+        eyez  =  -198;
+        start = 0;
+    }
     aspect= width/height;
 
     modelViewMatrixLoc = gl.getUniformLocation( program, "modelViewMatrix" );
@@ -167,12 +176,12 @@ window.onkeydown = function(event) {
 	break;
     case 'W':
     // Move forward
-    if(lp0[0] >= ARENASIZE-5 || lp0[0] <= 5 || lp0[2] <= -ARENASIZE+5 || lp0[2] >= -5){
+    /*if(lp0[0] >= ARENASIZE-5 || lp0[0] <= 5 || lp0[2] <= -ARENASIZE+5 || lp0[2] >= -5){
         hero.move(0);
          
-    } else {
-        mapMovement('W', key2);
-    }
+    } else {*/
+        mapMovement('W');
+    //}
     break;
     case 'D':
     // Turn left
@@ -199,9 +208,7 @@ window.onkeydown = function(event) {
     
 };
 
-function mapMovement(keyEvent,event) {
-    var xAxis = [0,73,144,213,284,290,358,421,501,568,643,646,715,717,785,858,927,928,1000];
-    var zAxis = [0,-82,-159,-237,-315,-392,-394,-474,-549,-622,-705,-785,-861,-863,-938,-1000];
+function mapMovement(keyEvent) {
     var heroXis = lp0[0];
     var heroZis = lp0[2];
     var element = keyEvent;
@@ -229,39 +236,40 @@ function mapMovement(keyEvent,event) {
             hero.move(0);
         } else if(heroZis < -704 && heroZis < -938 && heroXis > 647){//top block
             hero.move(0);
+        } else if(heroZis < -549 && heroZis > -622 && heroXis > 213 && heroXis < 858){//top middle
+            hero.move(0);
+        } else if(heroZis < -310 && heroZis > -549 && heroXis > 785 && heroXis < 858){//top middle
+            hero.move(0);
+        } else if(heroZis < -310 && heroZis > -394 && heroXis > 785 && heroXis < 1000){//top middle
+            hero.move(0);
+        } else if(heroZis < -237 && heroZis > -310 && heroXis > 927 && heroXis < 1000){//top middle
+            hero.move(0);
+        } else if(heroZis < -85 && heroZis > -159 && heroXis > 568 && heroXis < 1000){//bottom middle
+            hero.move(0);
+        } else if(heroZis < -85 && heroZis > -392 && heroXis > 568 && heroXis < 646){//bottom middle
+            hero.move(0);
+        } else if(heroZis < -392 && heroZis > -474 && heroXis > 568 && heroXis < 715){//bottom middle
+            hero.move(0);
+        } else if(heroZis < -392 && heroZis > -474 && heroXis > 213 && heroXis < 715){//bottom middle
+            hero.move(0);
+        } else if(heroZis < -159 && heroZis > -392 && heroXis > 213 && heroXis < 290){//bottom middle
+            hero.move(0);
+        } else if(heroZis < -159 && heroZis > -237 && heroXis > 290 && heroXis < 501){//bottom middle
+            hero.move(0);
+        } else if(heroZis < -237 && heroZis > -310 && heroXis > 358 && heroXis < 501){//bottom middle
+            hero.move(0);
+        } else if(heroXis <= 0){//left to right.
+            lp0[0] = 927;
+            lp0[2] = -198;
+            hero = new Hero(program, lp0[0], 0.0, lp0[2], -135, 10.0);
+            hero.init();
+            hero.show();
         } else {
-            hero.move(5);
+            hero.move(10);
         }
     } else {
         hero.move(5);
     } 
-    /*else if(element == 'W' && key2){
-        for(var i = 0; i < xAxis.length; i++){
-            if(heroXis <= xAxis[i]){
-                for(var j = 0; j < zAxis.length; j++){
-                    if(heroZis >= zAxis[j]){
-                        hero.move(5); 
-                        break;
-                    } else {
-                        hero.move(0); 
-                        break;
-                    }
-                }
-                break;
-            } else if(heroXis > xAxis[i]){
-                for(var j = 0; j < zAxis.length; j++){
-                    if(heroZis > zAxis[j]){
-                        hero.move(0); 
-                        break;
-                    } else {
-                        hero.move(0);
-                        break; 
-                    }
-                }
-                break;
-            }
-        }
-    }*/
 
 
 }
