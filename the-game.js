@@ -209,8 +209,26 @@ function mapMovement(keyEvent,event) {
     
     if(element == 'W'){
         
-        if(heroZis < 0 && heroZis > -85 && heroXis < 505){//bottom left block movement
+        if(heroZis < 0 && heroZis > -85 && heroXis < 505 || heroZis > (-85 - 79) && heroXis < 146){//bottom left block movement
             hero.move(0); 
+        } else if(heroZis < -310 && heroZis > -476 && heroXis < 146){//block on the left side
+            hero.move(0);
+        } else if(heroZis < -476 && heroZis > -549 && heroXis < 73){//block on the left side
+            hero.move(0);
+        } else if(heroZis < -545 && heroZis > -1000 && heroXis < 146){//block on the left side
+            hero.move(0);
+        } else if(heroZis < -859 && heroZis > -1000 && heroXis > 282 && heroXis < 647){//top block
+            hero.move(0);
+        } else if(heroZis < -785 && heroZis > -859 && heroXis > 422 && heroXis < 647){//top block
+            hero.move(0);
+        } else if(heroZis < -704 && heroZis > -788 && heroXis > 282 && heroXis < 647){//top block
+            hero.move(0);
+        } else if(heroZis < -704 && heroZis > -859 && heroXis > 717 && heroXis < 1000){//top block
+            hero.move(0);
+        } else if(heroZis < -704 && heroXis > 925 && heroXis < 1000){//top block
+            hero.move(0);
+        } else if(heroZis < -704 && heroZis < -938 && heroXis > 647){//top block
+            hero.move(0);
         } else {
             hero.move(5);
         }
