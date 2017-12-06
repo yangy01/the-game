@@ -6,7 +6,7 @@ function ThingSeeking(program, x, y, z, degrees, bounding_cir_rad)  {
 
     this.thingSeekingVertices = vwMesh.vertices[0].values;
 
-    this.thingSeekingNormals = vwMesh.vertices[1].values;
+    this.thingSeekingNormals = vwMesh.vertices[0].values;
 
     this.thingSeekingIndices = vwMesh.connectivity[0].indices;
 
@@ -38,7 +38,7 @@ ThingSeeking.prototype.show = function() {
 
     g_matrixStack.push(modelViewMatrix);
     modelViewMatrix = mult(modelViewMatrix, translate(this.x, 0.0, this.z));
-    modelViewMatrix = mult(modelViewMatrix, scalem(0.8,0.8,0.8));
+    modelViewMatrix = mult(modelViewMatrix, scalem(0.05,0.05,0.05));
 
     gl.bindBuffer( gl.ARRAY_BUFFER, this.vBuffer );
     this.vPosition = gl.getAttribLocation( program, "vPosition" );
@@ -54,13 +54,13 @@ ThingSeeking.prototype.show = function() {
 	console.log('Failed to get the storage location of vPosition');
     }
     gl.vertexAttribPointer( this.vNormal, 3, gl.FLOAT, false, 0, 0 );
-    gl.enableVertexAttribArray( this.vNormal );
+     gl.enableVertexAttribArray( this.vNormal ); 
 
     gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.iBuffer );
 
-    var ambientProduct = mult(la0, red);
-    var diffuseProduct = mult(ld0, red);
-    var specularProduct = mult(ls0, red);
+    var ambientProduct = mult(la0, yellow);
+    var diffuseProduct = mult(ld0, yellow);
+    var specularProduct = mult(ls0, yellow);
     
     gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"),
 		  flatten(ambientProduct));
