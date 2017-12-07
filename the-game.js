@@ -3,6 +3,7 @@ var gl;
 var canvas; 
 const WALLHEIGHT     = 70.0; // Some playing field parameters
 const ARENASIZE      = 1000.0;
+const EYEHEIGHT      = 15.0;
 const HERO_VP        = 0.625;
 
 const  upx=0.0, upy=1.0, upz=0.0;    // Some LookAt params 
@@ -64,46 +65,7 @@ var villWin = false;
 
 var villXis = 70;
 var villZis = -240;
-var goingUp = false;
 
-function startnextRound() {
-    var villScore = document.getElementById("villainScore");
-    var number = villScore.innerHTML;
-    number++;
-    villScore.innerHTML = number;
-    set = 0;
-    hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
-    hero.init();
-    hero.show();
-    villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
-    item = true;
-    villain.init();
-    villain.show();
-    arena = new Arena(program);
-    arena.init();
-    hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
-    hero.init();
-    thingSeeking = new ThingSeeking(program, 850, 0.0, -900, 0, 10.0);
-    thingSeeking.init();
-    villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
-    villain.init();
-    maze = new Maze(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
-    maze.init();
-    heroXis = 0;
-    heroZis = 0;
-    stuck = false;
-    stuckS = false;
-    item = false;
-    increX = 70;
-    increZ = -240;
-    swtch = 0;
-    set = 0;
-    villWin = false;
-    villXis = 70;
-    villZis = -240;
-    goingUp = false;
-
-}
 var trgr = false;
 var trgr2 = false;
 var temp = 0;
@@ -168,16 +130,6 @@ function render()
     
     // Hero's eye viewport 
     gl.viewport( vp1_left, vp1_bottom, (HERO_VP * width), height );
-    if(goingUp == true){
-        EYEHEIGHT = EYEHEIGHT +.25;
-        console.log(EYEHEIGHT)
-        if(EYEHEIGHT >35) {
-            goingUp = false;
-        }
-    } 
-    if(goingUp == false && EYEHEIGHT > 15){
-        EYEHEIGHT = EYEHEIGHT -.25;
-    }
     
     lp0[0] = hero.x + hero.xdir; // Light in front of hero, in line with hero's direction
     lp0[1] = EYEHEIGHT;
@@ -451,8 +403,6 @@ function mapMovementW(key) {
 }
 
 function villMovement(){
-    var num = .5;
-    console.log("cheese")
     var vXis = 70;
     var vZis = -240;
     
@@ -464,6 +414,7 @@ function villMovement(){
             villain.move(num);
             increZ += -num;
             villZis = increZ;
+            if(lp0[0] == villXis && lp0[2] == villZis){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -483,6 +434,7 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
+            if(lp0[0] == villXis && lp0[2] == villZis){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -502,6 +454,7 @@ function villMovement(){
             villain.move(num);
             increZ += -num;
             villZis = increZ;
+            if(lp0[0] == villXis && lp0[2] == villZis){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -521,6 +474,7 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
+            if(lp0[0] == villXis && lp0[2] == villZis){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -536,26 +490,6 @@ function villMovement(){
         } else if(villXis == 850){
             villWin = true;
             villain.move(0);
-
-            if(villWin) {
-                var villScore = document.getElementById("villainScore");
-                if(villScore.innerHTML <0) {   
-                startnextRound();
-                } else {
-                    (function r() {
-                      setTimeout(r, Math.random() * 10);
-                      let el = document.createElement(`div`);
-                      el.innerHTML = "<img src='./darcy128.png'></img>";
-                      el.style.position = `absolute`;
-                      el.style.zIndex = 999999;
-                      el.style.fontSize = (((Math.random() * 48) | 0) + 16) + `px`;
-                      el.style.left = ((Math.random() * innerWidth) | 0) + `px`;
-                      el.style.top = ((Math.random() * (innerHeight + pageYOffset)) | 0) + `px`;
-                      document.body.appendChild(el);
-                    })();
-                    startnextRound();
-
-                }
             if(villWin){
                 document.write("YOU LOSE!");
             }
@@ -563,12 +497,6 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(heroXis == villXis && heroZis == villZis){
-                set = 0;
-                hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
-                hero.init();
-                hero.show();
-                villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
         }
 } 
 
