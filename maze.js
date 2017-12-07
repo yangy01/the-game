@@ -30,22 +30,6 @@ function Maze(program, x, y, z, degrees, bounding_cir_rad)  {
         this.iBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.iBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.mazeIndices), gl.STATIC_DRAW);
-
-        /*var image0 = new Image();
-        image0.crossOrigin = "anonymous";
-        image0.src = "bingley128.png";
-        image0.onload = function() { 
-        var texture0 = gl.createTexture();
-        gl.activeTexture( gl.TEXTURE0);
-        gl.bindTexture( gl.TEXTURE_2D, texture0 );
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
-                  gl.UNSIGNED_BYTE, image0);
-        gl.generateMipmap( gl.TEXTURE_2D );
-        gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, 
-                  gl.NEAREST_MIPMAP_LINEAR );
-        gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
-        };*/
         
     };
     
@@ -69,12 +53,12 @@ function Maze(program, x, y, z, degrees, bounding_cir_rad)  {
         console.log('Failed to get the storage location of vPosition');
         }
         gl.vertexAttribPointer( this.vNormal, 3, gl.FLOAT, false, 0, 0 );
-        //gl.enableVertexAttribArray( this.vNormal );
+        gl.enableVertexAttribArray( this.vNormal );
     
         gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.iBuffer );
+        gl.enable(gl.CULL_FACE);	
+        gl.cullFace(gl.BACK);
 
-        //gl.uniform1i(gl.getUniformLocation(program, "texture_flag"),
-        //1);
         var ambientProduct = mult(la0, red);
         var diffuseProduct = mult(ld0, red);
         var specularProduct = mult(ls0, red);
@@ -89,38 +73,17 @@ function Maze(program, x, y, z, degrees, bounding_cir_rad)  {
                   flatten(lp0) );
         gl.uniform1f(gl.getUniformLocation(program, "shininess"),
                  me);
-
+        gl.disable(gl.CULL_FACE);
                  
-        
-        /*gl.uniformMatrix4fv( modelViewMatrixLoc, false, flatten(modelViewMatrix) );
-        gl.drawElements( gl.TRIANGLES, this.mazeIndices.length, gl.UNSIGNED_SHORT, 0 ); 
-        gl.uniform1i(gl.getUniformLocation(program, "texture"), 0); 
-        gl.drawElements( gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0 );  
-        gl.uniform1i(gl.getUniformLocation(program, "texture"), 1); 
-        gl.drawElements( gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 12 ); 
-        gl.uniform1i(gl.getUniformLocation(program, "texture"), 1);   // See from top
-        gl.drawElements( gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 24 ); 
-        gl.uniform1i(gl.getUniformLocation(program, "texture"), 1);   // See on right
-        gl.drawElements( gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 36 ); 
-        gl.uniform1i(gl.getUniformLocation(program, "texture"), 0); 
-        gl.drawElements( gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 48 );
-        gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);   // See on left
-        gl.drawElements( gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 60 );*/
-        
         gl.uniformMatrix4fv( modelViewMatrixLoc, false, flatten(modelViewMatrix) );
         gl.drawElements( gl.TRIANGLES, this.mazeIndices.length, gl.UNSIGNED_SHORT, 0 ); 
         
 
         modelViewMatrix = g_matrixStack.pop();
-        //gl.uniform1i(gl.getUniformLocation(program, "texture_flag"),
-        //0);
         // IMPORTANT: Disable current vertex attribute arrays so those in
         // a different object can be activated
         gl.disableVertexAttribArray(this.vPosition);
         gl.disableVertexAttribArray(this.vNormal);
-        
-
-
     
     };
     

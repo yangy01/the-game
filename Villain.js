@@ -125,7 +125,7 @@ Villain.prototype.show = function() {
     //this.rotate = this.rotate + 0.5;
     modelViewMatrix = mult(modelViewMatrix, translate(this.x, 0.0, this.z));
     modelViewMatrix = mult(modelViewMatrix, scalem(20.0,20.0,20.0));
-    modelViewMatrix = mult(modelViewMatrix, rotateY(this.rotate));
+    //modelViewMatrix = mult(modelViewMatrix, rotateY(this.rotate));
 
     gl.bindBuffer( gl.ARRAY_BUFFER, this.vBuffer );
     this.vPosition = gl.getAttribLocation( program, "vPosition" );
@@ -154,6 +154,8 @@ Villain.prototype.show = function() {
     gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.iBuffer );
 
     gl.enable(gl.CULL_FACE);	
+    //gl.cullFace(gl.BACK);
+    gl.cullFace(gl.FRONT);
     gl.cullFace(gl.BACK);
     gl.uniform1i(gl.getUniformLocation(program, "texture_flag"),
           1);

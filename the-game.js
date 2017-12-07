@@ -56,12 +56,17 @@ var item = false;
 var increX = 70;
 var increZ = -240;
 var swtch = 0;
+var comSwtch = 0;
 
 var set = 0;
+var counter = 0;
+var loop = false;
 var villWin = false;
 
 var villXis = 70;
 var villZis = -240;
+
+var num = .25;
 
 
 
@@ -106,10 +111,9 @@ window.onload = function init(){
 
     villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
     villain.init();
-
+    
     maze = new Maze(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
     maze.init();
-
 
     render();
 };
@@ -137,6 +141,7 @@ function render()
     thingSeeking.show();
     villain.show();
     maze.show();
+    //villMovement();
     
     // Overhead viewport 
     var horiz_offset = (width * (1.0 - HERO_VP) / 20.0);
@@ -153,7 +158,11 @@ function render()
     thingSeeking.show();
     villain.show();
     maze.show();
-    villMovement();
+    if(item == false){
+        villMovement();
+    } else {
+        villRuns();
+    }
 
     requestAnimFrame( render );
 };
@@ -161,6 +170,7 @@ function render()
 // Key listener
 
 window.onkeydown = function(event) {
+    
     var key = String.fromCharCode(event.keyCode);
     // For letters, the upper-case version of the letter is always
     // returned because the shift-key is regarded as a separate key in
@@ -203,6 +213,7 @@ function mapMovementW(key) {
             thingSeeking.init();
             thingSeeking.show();
             item = true;
+            //villRuns(item);
             hero.move(10);
         } else 
         if(stuckS == true){
@@ -274,30 +285,30 @@ function mapMovementW(key) {
         } else if(heroXis <= 0){//left to right.
             if(swtch == 0){
                 swtch = 1;
-                lp0[0] = 927;
-                lp0[2] = -198;
-                hero = new Hero(program, lp0[0], 0.0, lp0[2], -135, 10.0);
+                lp0[0] = 930;
+                lp0[2] = -200;
+                hero = new Hero(program, lp0[0], 0.0, lp0[2], -180, 10.0);
                 hero.init();
                 hero.show();
             } else {
                 swtch = 0;
-                lp0[0] = 927;
-                lp0[2] = -549;
-                hero = new Hero(program, lp0[0], 0.0, lp0[2], -135, 10.0);
+                lp0[0] = 930;
+                lp0[2] = -550;
+                hero = new Hero(program, lp0[0], 0.0, lp0[2], -180, 10.0);
                 hero.init();
                 hero.show();
             }
         }  else if(heroXis >= 1000){//right to left.
             //swtch = 1;
-            lp0[0] = 25;
-            lp0[2] = -237;
-            hero = new Hero(program, lp0[0], 0.0, lp0[2], -10, 10.0);
+            lp0[0] = 30;
+            lp0[2] = -240;
+            hero = new Hero(program, lp0[0], 0.0, lp0[2], 0, 10.0);
             hero.init();
             hero.show();
         } else if(heroZis >= 0){//bottom to top.
-            lp0[0] = 214;
+            lp0[0] = 210;
             lp0[2] = -950;
-            hero = new Hero(program, lp0[0], 0.0, lp0[2], -260, 10.0);
+            hero = new Hero(program, lp0[0], 0.0, lp0[2], -270, 10.0);
             hero.init();
             hero.show();
         } else if(heroZis <= -1000){//top to bottom.
@@ -308,7 +319,7 @@ function mapMovementW(key) {
             hero.show();
         } 
          else {
-            hero.move(10);
+            hero.move(15);
         }
     } 
     if(key == 'S'){
@@ -388,9 +399,10 @@ function mapMovementW(key) {
 }
 
 function villMovement(){
-    var num = .5;
+    var vXis = 70;
+    var vZis = -240;
     
-    if(item == false){
+    //if(item == false){
         if(villXis == 180 && set == 0){ 
             villain.turn(-90);
             set = 1;
@@ -398,8 +410,12 @@ function villMovement(){
             villain.move(num);
             increZ += -num;
             villZis = increZ;
-            if(heroXis == villXis && heroZis == villZis){
+            if(lp0[0] == villXis && lp0[2] == villZis){
                 set = 0;
+                villXis = vXis;
+                villZis = vZis;
+                increX = villXis;
+                increZ = villZis;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
                 hero.show();
@@ -414,8 +430,12 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(heroXis == villXis && heroZis == villZis){
+            if(lp0[0] == villXis && lp0[2] == villZis){
                 set = 0;
+                villXis = vXis;
+                villZis = vZis;
+                increX = villXis;
+                increZ = villZis;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
                 hero.show();
@@ -430,8 +450,12 @@ function villMovement(){
             villain.move(num);
             increZ += -num;
             villZis = increZ;
-            if(heroXis == villXis && heroZis == villZis){
+            if(lp0[0] == villXis && lp0[2] == villZis){
                 set = 0;
+                villXis = vXis;
+                villZis = vZis;
+                increX = villXis;
+                increZ = villZis;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
                 hero.show();
@@ -446,8 +470,12 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(heroXis == villXis && heroZis == villZis){
+            if(lp0[0] == villXis && lp0[2] == villZis){
                 set = 0;
+                villXis = vXis;
+                villZis = vZis;
+                increX = villXis;
+                increZ = villZis;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
                 hero.show();
@@ -465,16 +493,89 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(heroXis == villXis && heroZis == villZis){
-                set = 0;
-                hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
-                hero.init();
-                hero.show();
-                villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
+        }
+
+    //} else if(item == true){
+        //villRuns(item);
+    //}
+} 
+
+function villRuns(){
+    //if(bool == true){
+        //num = 1.75;
+        if(villXis == 180 && counter == 0){
+            villain.turn(-180);  
+            counter = 1;
+        } else if(villZis < -240 && counter == 1){
+            villain.move(num);
+            increZ += num;
+            villZis = increZ;
+        } else if(villZis == -240 && counter == 1){
+            villain.turn(-90);  
+            counter = 2;
+        } else if(villXis > 0 && counter == 2){
+            villain.move(-num);
+            increX += -num;
+            villXis = increX;
+        } else if(villXis == 0 && counter == 2){
+            if(comSwtch == 0){ // 1
+                comSwtch = 1;
+                counter = 3;
+                villXis = 930;
+                increX = villXis;
+                villZis = -200;
+                increZ = villZis;
+                villain = new Villain(program, villXis, 0.0, villZis , 180, 10.0);
+                villain.init();
+                villain.show();
+            } else { // 2
+                comSwtch = 2;
+                counter = 3;
+                villXis = 930;
+                increX = villXis;
+                villZis = -550;
+                increZ = villZis;
+                villain = new Villain(program, villXis, 0.0, villZis, -90, 10.0);
                 villain.init();
                 villain.show();
             }
+        } else if(comSwtch == 2 && villZis > -670){
+            villain.move(num);
+            increZ += -num;
+            villZis = increZ;
+        } else if(villZis == -670 && comSwtch == 2 && counter == 3){
+            villain.turn(-90);  
+            counter = 4;
+        } else if(villXis > 180 && comSwtch == 2 && counter == 4){
+            villain.move(num);
+            increX += -num;
+            villXis = increX;
+        } else if(counter == 4 && villXis == 180 && comSwtch == 2){
+            comSwtch = 0;
+            villain.turn(90); 
+            counter = 0;
+        } else if(comSwtch == 1 && villXis > 750){
+            villain.move(num);
+            increX -= num;
+            villXis = increX;
+        } else if(counter == 3 && villXis == 750){
+            villain.turn(90);  
+            counter = 4;
+        } else if(villZis > -510 && counter == 4){
+            villain.move(num);
+            increZ += -num;
+            villZis = increZ;
+        } else if(counter == 4 && villZis == -510){
+            villain.turn(-90); 
+            counter = 5;
+        } else if(villXis > 180 && counter == 5){
+            villain.move(num);
+            increX += -num;
+            villXis = increX;
+        } else if(counter == 5 && villXis == 180){
+            comSwtch = 2;
+            villain.turn(90); 
+            counter = 0;
         }
-
-    }
-} 
+    //}
+}
