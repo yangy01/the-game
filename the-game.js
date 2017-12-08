@@ -446,7 +446,6 @@ function mapMovement(key) {
 }
 
 function villMovement(){
-    var num = .5;
     console.log("cheese")
     if(item == false){
         if(villXis == 180 && set == 0){ 
