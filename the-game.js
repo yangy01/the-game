@@ -47,6 +47,7 @@ var g_matrixStack = []; // Stack for storing a matrix
 
 var heroXis = 0;
 var heroZis = 0;
+var heroWin = false;
 
 var stuck = false;
 var stuckS = false;
@@ -62,6 +63,8 @@ var villWin = false;
 
 var villXis = 70;
 var villZis = -240;
+var vXis = 70;
+var vZis = -240;
 var trgr = false;
 var trgr2 = false;
 var temp = 0;
@@ -105,7 +108,44 @@ function startnextRound() {
     villXis = 70;
     villZis = -240;
     goingUp = false;
+}
 
+function startnextRoundHero() {
+    var heroScore = document.getElementById("heroScore");
+    var number = heroScore.innerHTML;
+    number++;
+    heroScore.innerHTML = number;
+    set = 0;
+    hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
+    hero.init();
+    hero.show();
+    villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
+    item = true;
+    villain.init();
+    villain.show();
+    arena = new Arena(program);
+    arena.init();
+    hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
+    hero.init();
+    thingSeeking = new ThingSeeking(program, 850, 0.0, -900, 0, 10.0);
+    thingSeeking.init();
+    villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
+    villain.init();
+    maze = new Maze(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
+    maze.init();
+    heroXis = 0;
+    heroZis = 0;
+    stuck = false;
+    stuckS = false;
+    item = false;
+    increX = 70;
+    increZ = -240;
+    swtch = 0;
+    set = 0;
+    villWin = false;
+    villXis = 70;
+    villZis = -240;
+    goingUp = false;
 }
 
 
@@ -253,17 +293,29 @@ function mapMovement(key) {
     heroZis = lp0[2];
     
     var itemXis = 850;
-    var itemZis = -905;
+    var itemZis = -900;
     
     if(key == 'W'){
-        if(heroZis <= (itemZis-2) && heroXis <= (itemXis-2) && item == false || 
-           heroZis >= (itemZis+2) && heroXis >= (itemXis+2) && item == false){
-            thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
-            thingSeeking.init();
-            thingSeeking.show();
-            item = true;
+        if(heroZis >= (-895) || heroZis <= (-905) && 
+           heroXis <= (795) || heroXis >= (805) ){
             hero.move(10);
-        } else 
+        } else {
+            heroWin = true;
+            if(heroWin) {
+                heroWin = false;
+                var heroScore = document.getElementById("heroScore");
+                if(heroScore.innerHTML < 2) {   
+                    startnextRoundHero();
+                } else {
+                    heroScore.innerHTML = 3;
+                    thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
+                    thingSeeking.init();
+                    thingSeeking.show();
+                    item = true;
+                    hero.move(10);
+                }
+            }
+        }
         if(stuckS == true){
             hero.move(10);
             stuckS = false;
@@ -347,7 +399,6 @@ function mapMovement(key) {
                 hero.show();
             }
         }  else if(heroXis >= 1000){//right to left.
-            //swtch = 1;
             lp0[0] = 30;
             lp0[2] = -240;
             hero = new Hero(program, lp0[0], 0.0, lp0[2], 0, 10.0);
@@ -371,6 +422,26 @@ function mapMovement(key) {
         }
     } 
     if(key == 'S'){
+        if(heroZis >= (-895) || heroZis <= (-905) && 
+           heroXis <= (795) || heroXis >= (805) ){
+            hero.move(-5);
+        } else {
+            heroWin = true;
+            if(heroWin) {
+                heroWin = false;
+                var heroScore = document.getElementById("heroScore");
+                if(heroScore.innerHTML < 2) {   
+                    startnextRoundHero();
+                } else {
+                    heroScore.innerHTML = 3;
+                    thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
+                    thingSeeking.init();
+                    thingSeeking.show();
+                    item = true;
+                    hero.move(-5);
+                }
+            }
+        }
         if(stuck == true){
             hero.move(-5);
             stuck = false;
@@ -443,6 +514,7 @@ function mapMovement(key) {
         }
     }
     
+    
 }
 
 function villMovement(){
@@ -455,7 +527,8 @@ function villMovement(){
             villain.move(num);
             increZ += -num;
             villZis = increZ;
-            if(lp0[0] == villXis && lp0[2] == villZis){
+            if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+                heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -471,11 +544,12 @@ function villMovement(){
         }else if(villZis == -670 && set == 1){
             villain.turn(90);        
             set = 2;
-        } else if(villXis < 680 && set == 2){/////start here1
+        } else if(villXis < 680 && set == 2){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(lp0[0] == villXis && lp0[2] == villZis){
+            if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+                heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -495,7 +569,8 @@ function villMovement(){
             villain.move(num);
             increZ += -num;
             villZis = increZ;
-            if(lp0[0] == villXis && lp0[2] == villZis){
+            if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+                heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -515,7 +590,8 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(lp0[0] == villXis && lp0[2] == villZis){
+            if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+                heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -534,7 +610,7 @@ function villMovement(){
 
             if(villWin) {
                 var villScore = document.getElementById("villainScore");
-                if(villScore.innerHTML <0) {   
+                if(villScore.innerHTML < 2) {   
                 startnextRound();
                 } else {
                     (function r() {
@@ -548,7 +624,6 @@ function villMovement(){
                       el.style.top = ((Math.random() * (innerHeight + pageYOffset)) | 0) + `px`;
                       document.body.appendChild(el);
                     })();
-                    startnextRound();
 
                 }
             }
@@ -563,7 +638,8 @@ function villMovement(){
 } 
 
 function villRuns(){
-    if(lp0[0] == villXis && lp0[2] == villZis){
+    if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+       heroXis == (villXis-2) || heroXis == (villXis+2) ){
         document.write("YOU WIN!");
     } else 
         if(villZis == -900 && temp2 == 0){
@@ -638,9 +714,9 @@ function villRuns(){
             increZ += -num;
             villZis = increZ;
         } else if(villZis == -670 && comSwtch == 2 && counter == 3){
-            villain.turn(-90); //90 
+            villain.turn(-90); 
             counter = 4;
-        } else if(villXis > 180 && counter == 4 && comSwtch == 2){ //&& comSwtch == 2 
+        } else if(villXis > 180 && counter == 4 && comSwtch == 2){ 
             villain.move(num);
             increX += -num;
             villXis = increX;
