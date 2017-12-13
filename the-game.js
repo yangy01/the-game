@@ -26,8 +26,8 @@ var md   = [ 0.08, 0.6 , 0.08, 1.0 ]; // material diffuse
 var ms   = [ 0.6  , 0.7, 0.6  , 1.0 ]; // material specular 
 var me      = 75;             // shininess exponent 
 const red  = [ 1.0,0.0,0.0, 1.0 ]; // pure red 
-const blue = [ 0.0,0.0,1.0, 1.0 ]; // pure blue 
-const green = [ 0.0,1.0,0.0, 1.0 ]; // pure blue 
+const blue = [ 0.0,0.0,0.0, 1.0 ]; // pure blue 
+const green = [ 0.0,0.0,0.0, 1.0 ]; // pure blue 
 const yellow = [ 1.0,1.0,0.0, 1.0 ]; // pure yellow
 
 
@@ -120,18 +120,18 @@ function startnextRoundHero() {
     hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
     hero.init();
     hero.show();
-    villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
+    slenderMan = new slender(program, 70, 0.0, -240, 0, 10.0);
     item = true;
-    villain.init();
-    villain.show();
+    slenderMan.init();
+    slenderMan.show();
     arena = new Arena(program);
     arena.init();
     hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
     hero.init();
     thingSeeking = new ThingSeeking(program, 850, 0.0, -900, 0, 10.0);
     thingSeeking.init();
-    villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
-    villain.init();
+    slenderMan = new slender(program, 70, 0.0, -240, 0, 10.0);
+    slenderMan.init();
     maze = new Maze(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
     maze.init();
     heroXis = 0;
@@ -206,7 +206,7 @@ function render()
 
     
     // Hero's eye viewport 
-    gl.viewport( vp1_left, vp1_bottom, (HERO_VP * width), height );
+    //gl.viewport( vp1_left, vp1_bottom, (HERO_VP * width), height );
     if(goingUp == true){
         EYEHEIGHT = EYEHEIGHT +.25;
         console.log(EYEHEIGHT)
@@ -236,12 +236,12 @@ function render()
     
     // Overhead viewport 
     var horiz_offset = (width * (1.0 - HERO_VP) / 20.0);
-    gl.viewport( vp1_left + (HERO_VP * width) + horiz_offset ,
-		 vp1_bottom, 18 * horiz_offset, height ); /// the other window on the right 
-    modelViewMatrix = lookAt(  vec3(500.0,100.0,-500.0),
-			       vec3(500.0,0.0,-500.0),
-			       vec3(0.0,0.0,-1.0) );
-    projectionMatrix = ortho( -500,500, -500,500, 0,200 );
+    //gl.viewport( vp1_left + (HERO_VP * width) + horiz_offset ,
+		 //vp1_bottom, 18 * horiz_offset, height ); /// the other window on the right 
+    //modelViewMatrix = lookAt(  vec3(500.0,100.0,-500.0),
+	//		       vec3(500.0,0.0,-500.0),
+	//		       vec3(0.0,0.0,-1.0) );
+    //projectionMatrix = ortho( -500,500, -500,500, 0,200 );
     gl.uniformMatrix4fv( modelViewMatrixLoc, false, flatten(modelViewMatrix) );
     gl.uniformMatrix4fv( projectionMatrixLoc, false, flatten(projectionMatrix) );
     arena.show();
@@ -275,6 +275,7 @@ window.onkeydown = function(event) {
     case 'W':
     // Move forward
     mapMovement(key);
+    //checkWin();
     //}
     break;
     case 'D':
@@ -292,6 +293,27 @@ window.onkeydown = function(event) {
     
 };
 
+function checkWin(){
+    if(heroZis > -915 && heroZis < -900  && heroXis < 850 && heroXis > 835 ){
+        //hero.move(10);
+        heroWin = true;
+        if(heroWin) {
+            heroWin = false;
+            var heroScore = document.getElementById("heroScore");
+            if(heroScore.innerHTML < 2) {   
+                startnextRoundHero();
+            } else {
+                heroScore.innerHTML = 3;
+                thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
+                thingSeeking.init();
+                thingSeeking.show();
+                item = true;
+                hero.move(10);
+            }
+        }
+    } 
+}
+
 function mapMovement(key) { 
     heroXis = lp0[0];
     heroZis = lp0[2];
@@ -299,27 +321,9 @@ function mapMovement(key) {
     var itemXis = 850;
     var itemZis = -905;
     
+    checkWin();
+        
     if(key == 'W'){
-        if(heroZis >= (-895) || heroZis <= (-905) && 
-           heroXis <= (795) || heroXis >= (805) ){
-            hero.move(10);
-        } else {
-            heroWin = true;
-            if(heroWin) {
-                heroWin = false;
-                var heroScore = document.getElementById("heroScore");
-                if(heroScore.innerHTML < 2) {   
-                    startnextRoundHero();
-                } else {
-                    heroScore.innerHTML = 3;
-                    thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
-                    thingSeeking.init();
-                    thingSeeking.show();
-                    item = true;
-                    hero.move(10);
-                }
-            }
-        }
         if(stuckS == true){
             hero.move(10);
             stuckS = false;
@@ -424,28 +428,8 @@ function mapMovement(key) {
          else {
             hero.move(10);
         }
-    } 
+    } else 
     if(key == 'S'){
-        if(heroZis >= (-895) || heroZis <= (-905) && 
-           heroXis <= (795) || heroXis >= (805) ){
-            hero.move(-5);
-        } else {
-            heroWin = true;
-            if(heroWin) {
-                heroWin = false;
-                var heroScore = document.getElementById("heroScore");
-                if(heroScore.innerHTML < 2) {   
-                    startnextRoundHero();
-                } else {
-                    heroScore.innerHTML = 3;
-                    thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
-                    thingSeeking.init();
-                    thingSeeking.show();
-                    item = true;
-                    hero.move(-5);
-                }
-            }
-        }
         if(stuck == true){
             hero.move(-5);
             stuck = false;
@@ -514,10 +498,8 @@ function mapMovement(key) {
             hero.move(0);
         } else {
             hero.move(-5);
-            
         }
-    }
-    
+    } 
     
 }
 
@@ -533,7 +515,7 @@ function villMovement(){
             villZis = increZ;
             //if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
                 //heroXis == (villXis-2) || heroXis == (villXis+2) ){
-            if(heroZis == (villZis) && heroZis == (villZis)){
+            if(heroZis == (villZis) && heroXis == (villXis)){
                 set = 0;
                 villXis = vXis;
                 villZis = vZis;
@@ -555,7 +537,7 @@ function villMovement(){
             villXis = increX;
             //if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
                 //heroXis == (villXis-2) || heroXis == (villXis+2) ){
-            if(heroZis == (villZis) && heroZis == (villZis)){
+            if(heroZis == (villZis) && heroXis == (villXis)){
                     set = 0;
                     villXis = vXis;
                     villZis = vZis;
@@ -577,7 +559,7 @@ function villMovement(){
             villZis = increZ;
             //if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
                 //heroXis == (villXis-2) || heroXis == (villXis+2) ){
-            if(heroZis == (villZis) && heroZis == (villZis)){
+            if(heroZis == (villZis) && heroXis == (villXis)){
                     set = 0;
                     villXis = vXis;
                     villZis = vZis;
@@ -599,7 +581,7 @@ function villMovement(){
             villXis = increX;
             //if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
             //    heroXis == (villXis-2) || heroXis == (villXis+2) ){
-            if(heroZis == (villZis) && heroZis == (villZis)){
+            if(heroZis == (villZis) && heroXis == (villXis)){
                     set = 0;
                     villXis = vXis;
                     villZis = vZis;
@@ -624,7 +606,7 @@ function villMovement(){
                     (function r() {
                       setTimeout(r, Math.random() * 10);
                       let el = document.createElement(`div`);
-                      el.innerHTML = "<img src='./darcy128.png'></img>";
+                      el.innerHTML = "<img src='./lose.png'></img>";
                       el.style.position = `absolute`;
                       el.style.zIndex = 999999;
                       el.style.fontSize = (((Math.random() * 48) | 0) + 16) + `px`;
@@ -646,9 +628,19 @@ function villMovement(){
 } 
 
 function villRuns(){
-    if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
-       heroXis == (villXis-2) || heroXis == (villXis+2) ){
-        document.write("YOU WIN!");
+    if(heroZis == (villZis) && heroXis == (villXis)){
+        //document.write("YOU WIN!");
+        (function r() {
+            setTimeout(r, Math.random() * 10);
+            let el = document.createElement(`div`);
+            el.innerHTML = "<img src='./win.png'></img>";
+            el.style.position = `absolute`;
+            el.style.zIndex = 999999;
+            el.style.fontSize = (((Math.random() * 48) | 0) + 16) + `px`;
+            el.style.left = ((Math.random() * innerWidth) | 0) + `px`;
+            el.style.top = ((Math.random() * (innerHeight + pageYOffset)) | 0) + `px`;
+            document.body.appendChild(el);
+          })();
     } else 
         if(villZis == -900 && temp2 == 0){
             slenderMan.turn(180);

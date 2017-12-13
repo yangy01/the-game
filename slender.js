@@ -60,7 +60,7 @@ slender.prototype.show = function () {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.iBuffer);
 
     var lightPosition = vec4(10.0, 300.0, 10.0, 0.8);
-    var lightAmbient = vec4(10.0, 0.0, 0.0, 1.0);
+    var lightAmbient = vec4(0.0, 0.0, 0.0, 1.0);
     var lightDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
     var lightSpecular = vec4(1.0, 1.0, 1.0, 1.0);
 
@@ -68,7 +68,7 @@ slender.prototype.show = function () {
 
     var materialSpecular = vec4(1.0, 1.0, 1.0, 1.0);
     var materialShininess = 40.0;
-    var materialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
+    var materialDiffuse = vec4(0.5, 0.5, 0.5, 0.1);
     var ambientProduct = mult(lightAmbient, materialAmbient);
     var diffuseProduct = mult(lightDiffuse, materialDiffuse);
     var specularProduct = mult(lightSpecular, materialSpecular);

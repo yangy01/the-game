@@ -84,9 +84,9 @@ function Arena () {
 	gl.vertexAttribPointer( this.vNormal, 3, gl.FLOAT, false, 0, 0 );
 	gl.enableVertexAttribArray( this.vNormal );
 
-	var ambientProduct = mult(la0, ma);
-	var diffuseProduct = mult(ld0, md);
-	var specularProduct = mult(ls0, ms);
+	var ambientProduct = mult(la0, blue);
+	var diffuseProduct = mult(ld0, blue);
+	var specularProduct = mult(ls0, blue);
 	
 	gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"),
 		      flatten(ambientProduct));
