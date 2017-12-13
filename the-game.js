@@ -41,7 +41,6 @@ var hero;
 var thingSeeking;
 var villain;
 var maze;
-var slender;
 
 var g_matrixStack = []; // Stack for storing a matrix
 
@@ -56,6 +55,7 @@ var item = false;
 var increX = 70;
 var increZ = -240;
 var swtch = 0;
+var comSwtch = 0;
 
 var set = 0;
 var counter = 0;
@@ -184,8 +184,7 @@ window.onload = function init(){
 
     hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
     hero.init();
-    slenderMan = new slender(program, 70, 0.0, -240, 0, 10.0);
-    slenderMan.init();
+
     thingSeeking = new ThingSeeking(program, 850, 0.0, -900, 0, 10.0);
     thingSeeking.init();
 
@@ -231,7 +230,6 @@ function render()
     thingSeeking.show();
     villain.show();
     maze.show();
-    slenderMan.show();
     
     // Overhead viewport 
     var horiz_offset = (width * (1.0 - HERO_VP) / 20.0);
@@ -248,7 +246,11 @@ function render()
     thingSeeking.show();
     villain.show();
     maze.show();
-    villMovement();
+    if(item == false){
+        villMovement();
+    } else {
+        villRuns();
+    }
 
     requestAnimFrame( render );
 };
@@ -291,7 +293,7 @@ function mapMovement(key) {
     heroZis = lp0[2];
     
     var itemXis = 850;
-    var itemZis = -905;
+    var itemZis = -900;
     
     if(key == 'W'){
         if(heroZis >= (-895) || heroZis <= (-905) && 
@@ -383,9 +385,9 @@ function mapMovement(key) {
         } else if(heroXis <= 0){//left to right.
             if(swtch == 0){
                 swtch = 1;
-                lp0[0] = 927;
-                lp0[2] = -198;
-                hero = new Hero(program, lp0[0], 0.0, lp0[2], -135, 10.0);
+                lp0[0] = 930;
+                lp0[2] = -200;
+                hero = new Hero(program, lp0[0], 0.0, lp0[2], -180, 10.0);
                 hero.init();
                 hero.show();
             } else {
@@ -403,9 +405,9 @@ function mapMovement(key) {
             hero.init();
             hero.show();
         } else if(heroZis >= 0){//bottom to top.
-            lp0[0] = 214;
+            lp0[0] = 210;
             lp0[2] = -950;
-            hero = new Hero(program, lp0[0], 0.0, lp0[2], -260, 10.0);
+            hero = new Hero(program, lp0[0], 0.0, lp0[2], -270, 10.0);
             hero.init();
             hero.show();
         } else if(heroZis <= -1000){//top to bottom.
@@ -516,7 +518,6 @@ function mapMovement(key) {
 }
 
 function villMovement(){
-    var num = .5;
     console.log("cheese")
     if(item == false){
         if(villXis == 180 && set == 0){ 
@@ -529,6 +530,10 @@ function villMovement(){
             if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
                 heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
+                villXis = vXis;
+                villZis = vZis;
+                increX = villXis;
+                increZ = villZis;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
                 hero.show();
@@ -546,6 +551,10 @@ function villMovement(){
             if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
                 heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
+                villXis = vXis;
+                villZis = vZis;
+                increX = villXis;
+                increZ = villZis;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
                 hero.show();
@@ -563,6 +572,10 @@ function villMovement(){
             if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
                 heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
+                villXis = vXis;
+                villZis = vZis;
+                increX = villXis;
+                increZ = villZis;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
                 hero.show();
@@ -580,6 +593,10 @@ function villMovement(){
             if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
                 heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
+                villXis = vXis;
+                villZis = vZis;
+                increX = villXis;
+                increZ = villZis;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
                 hero.show();
