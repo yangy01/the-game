@@ -48,6 +48,7 @@ var g_matrixStack = []; // Stack for storing a matrix
 
 var heroXis = 0;
 var heroZis = 0;
+var heroWin = false;
 
 var stuck = false;
 var stuckS = false;
@@ -57,10 +58,18 @@ var increZ = -240;
 var swtch = 0;
 
 var set = 0;
+var counter = 0;
 var villWin = false;
 
 var villXis = 70;
 var villZis = -240;
+var vXis = 70;
+var vZis = -240;
+var trgr = false;
+var trgr2 = false;
+var temp = 0;
+var temp2 = 0;
+var num = 1;
 var goingUp = false;
 
 function startnextRound() {
@@ -99,7 +108,44 @@ function startnextRound() {
     villXis = 70;
     villZis = -240;
     goingUp = false;
+}
 
+function startnextRoundHero() {
+    var heroScore = document.getElementById("heroScore");
+    var number = heroScore.innerHTML;
+    number++;
+    heroScore.innerHTML = number;
+    set = 0;
+    hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
+    hero.init();
+    hero.show();
+    villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
+    item = true;
+    villain.init();
+    villain.show();
+    arena = new Arena(program);
+    arena.init();
+    hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
+    hero.init();
+    thingSeeking = new ThingSeeking(program, 850, 0.0, -900, 0, 10.0);
+    thingSeeking.init();
+    villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
+    villain.init();
+    maze = new Maze(program, ARENASIZE/4.0, 0.0, -ARENASIZE/4.0, 0, 10.0);
+    maze.init();
+    heroXis = 0;
+    heroZis = 0;
+    stuck = false;
+    stuckS = false;
+    item = false;
+    increX = 70;
+    increZ = -240;
+    swtch = 0;
+    set = 0;
+    villWin = false;
+    villXis = 70;
+    villZis = -240;
+    goingUp = false;
 }
 
 
@@ -218,11 +264,11 @@ window.onkeydown = function(event) {
     switch (key) {
     case 'S':
     // Move backward
-    mapMovementW(key);
+    mapMovement(key);
 	break;
     case 'W':
     // Move forward
-    mapMovementW(key);
+    mapMovement(key);
     //}
     break;
     case 'D':
@@ -240,7 +286,7 @@ window.onkeydown = function(event) {
     
 };
 
-function mapMovementW(key) { 
+function mapMovement(key) { 
     heroXis = lp0[0];
     heroZis = lp0[2];
     
@@ -248,14 +294,26 @@ function mapMovementW(key) {
     var itemZis = -905;
     
     if(key == 'W'){
-        if(heroZis <= (itemZis-2) && heroXis <= (itemXis-2) && item == false || 
-           heroZis >= (itemZis+2) && heroXis >= (itemXis+2) && item == false){
-            thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
-            thingSeeking.init();
-            thingSeeking.show();
-            item = true;
+        if(heroZis >= (-895) || heroZis <= (-905) && 
+           heroXis <= (795) || heroXis >= (805) ){
             hero.move(10);
-        } else 
+        } else {
+            heroWin = true;
+            if(heroWin) {
+                heroWin = false;
+                var heroScore = document.getElementById("heroScore");
+                if(heroScore.innerHTML < 2) {   
+                    startnextRoundHero();
+                } else {
+                    heroScore.innerHTML = 3;
+                    thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
+                    thingSeeking.init();
+                    thingSeeking.show();
+                    item = true;
+                    hero.move(10);
+                }
+            }
+        }
         if(stuckS == true){
             hero.move(10);
             stuckS = false;
@@ -332,17 +390,16 @@ function mapMovementW(key) {
                 hero.show();
             } else {
                 swtch = 0;
-                lp0[0] = 927;
-                lp0[2] = -549;
-                hero = new Hero(program, lp0[0], 0.0, lp0[2], -135, 10.0);
+                lp0[0] = 930;
+                lp0[2] = -530;
+                hero = new Hero(program, lp0[0], 0.0, lp0[2], -180, 10.0);
                 hero.init();
                 hero.show();
             }
         }  else if(heroXis >= 1000){//right to left.
-            //swtch = 1;
-            lp0[0] = 25;
-            lp0[2] = -237;
-            hero = new Hero(program, lp0[0], 0.0, lp0[2], -10, 10.0);
+            lp0[0] = 30;
+            lp0[2] = -240;
+            hero = new Hero(program, lp0[0], 0.0, lp0[2], 0, 10.0);
             hero.init();
             hero.show();
         } else if(heroZis >= 0){//bottom to top.
@@ -363,7 +420,26 @@ function mapMovementW(key) {
         }
     } 
     if(key == 'S'){
-        //hero.move(-5);
+        if(heroZis >= (-895) || heroZis <= (-905) && 
+           heroXis <= (795) || heroXis >= (805) ){
+            hero.move(-5);
+        } else {
+            heroWin = true;
+            if(heroWin) {
+                heroWin = false;
+                var heroScore = document.getElementById("heroScore");
+                if(heroScore.innerHTML < 2) {   
+                    startnextRoundHero();
+                } else {
+                    heroScore.innerHTML = 3;
+                    thingSeeking = new ThingSeeking(program, 1.0, 0.0, 1.0, 0.0, 10.0);
+                    thingSeeking.init();
+                    thingSeeking.show();
+                    item = true;
+                    hero.move(-5);
+                }
+            }
+        }
         if(stuck == true){
             hero.move(-5);
             stuck = false;
@@ -436,6 +512,7 @@ function mapMovementW(key) {
         }
     }
     
+    
 }
 
 function villMovement(){
@@ -449,7 +526,8 @@ function villMovement(){
             villain.move(num);
             increZ += -num;
             villZis = increZ;
-            if(heroXis == villXis && heroZis == villZis){
+            if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+                heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
@@ -465,7 +543,8 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(heroXis == villXis && heroZis == villZis){
+            if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+                heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
@@ -481,7 +560,8 @@ function villMovement(){
             villain.move(num);
             increZ += -num;
             villZis = increZ;
-            if(heroXis == villXis && heroZis == villZis){
+            if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+                heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
@@ -497,7 +577,8 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(heroXis == villXis && heroZis == villZis){
+            if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+                heroXis == (villXis-2) || heroXis == (villXis+2) ){
                 set = 0;
                 hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
                 hero.init();
@@ -512,7 +593,7 @@ function villMovement(){
 
             if(villWin) {
                 var villScore = document.getElementById("villainScore");
-                if(villScore.innerHTML <0) {   
+                if(villScore.innerHTML < 2) {   
                 startnextRound();
                 } else {
                     (function r() {
@@ -526,7 +607,6 @@ function villMovement(){
                       el.style.top = ((Math.random() * (innerHeight + pageYOffset)) | 0) + `px`;
                       document.body.appendChild(el);
                     })();
-                    startnextRound();
 
                 }
             }
@@ -535,16 +615,118 @@ function villMovement(){
             villain.move(num);
             increX += num;
             villXis = increX;
-            if(heroXis == villXis && heroZis == villZis){
-                set = 0;
-                hero = new Hero(program, eyex, 0.0, eyez-30, -180, 10.0);
-                hero.init();
-                hero.show();
-                villain = new Villain(program, 70, 0.0, -240, 0, 10.0);
-                villain.init();
-                villain.show();
-            }
         }
 
     }
 } 
+
+function villRuns(){
+    if(heroZis == (villZis+2) || heroZis == (villZis-2) && 
+       heroXis == (villXis-2) || heroXis == (villXis+2) ){
+        document.write("YOU WIN!");
+    } else 
+        if(villZis == -900 && temp2 == 0){
+            villain.turn(180);
+            temp2 = 1;
+        } else if(villZis == -900 && villXis > 680){
+            villain.move(num);
+            increX += -num;
+            villXis = increX;
+        } else if(villXis == 680 && temp2 == 1){
+            villain.turn(-90);
+            trgr2 = true;
+            temp2 = 2;
+        } else if(villXis == 680 && villZis < -670 && trgr2 == false && temp == 0){
+            villain.turn(180);
+            trgr2 = true;
+            temp = 1;
+        } else if(villXis == 680 && villZis < -670 && counter == 0 && trgr2 == true){
+            villain.move(num);
+            increZ += num; 
+            villZis = increZ;
+        } else if(villZis == -670 && counter == 0 && trgr == false){
+            if(trgr2 == true){
+                villain.turn(90);
+                trgr2 = false;
+            } else {
+                villain.turn(-180);
+            }
+            counter = 5; 
+            trgr = true;
+        }  else if(villXis == 180 && counter == 0){
+            villain.turn(-180);  
+            trgr = true;
+            counter = 1;
+        } else if(villZis < -240 && counter == 1){
+            villain.move(num);
+            increZ += num;
+            villZis = increZ;
+            temp = 3;
+            counter = 1;
+        } else if(villZis == -240 && counter == 1){
+            villain.turn(90);  ///
+            counter = 2;
+        } else if(villXis > 0 && counter == 2){
+            villain.move(num);
+            increX += -num;
+            villXis = increX;
+        } else if(villXis == 0 && counter == 2){
+            if(comSwtch == 0){ // 1
+                comSwtch = 1;
+                counter = 3;
+                villXis = 930;
+                increX = villXis;
+                villZis = -200;
+                increZ = villZis;
+                villain = new Villain(program, villXis, 0.0, villZis , 180, 10.0);
+                villain.init();
+                villain.show();
+            } else { // 2
+                comSwtch = 2;
+                counter = 3;
+                villXis = 930;
+                increX = villXis;
+                villZis = -550;
+                increZ = villZis;
+                villain = new Villain(program, villXis, 0.0, villZis, -90, 10.0);
+                villain.init();
+                villain.show();
+            }
+        } else if(comSwtch == 2 && villZis > -670){
+            villain.move(num);
+            increZ += -num;
+            villZis = increZ;
+        } else if(villZis == -670 && comSwtch == 2 && counter == 3){
+            villain.turn(-90); 
+            counter = 4;
+        } else if(villXis > 180 && counter == 4 && comSwtch == 2){ 
+            villain.move(num);
+            increX += -num;
+            villXis = increX;
+        } else if(counter == 4 && villXis == 180 && comSwtch == 2){
+            comSwtch = 0;
+            villain.turn(90); 
+            counter = 0;
+        } else if(comSwtch == 1 && villXis > 750){
+            villain.move(num);
+            increX -= num;
+            villXis = increX;
+        } else if(counter == 3 && villXis == 750){
+            villain.turn(90);
+            counter = 4;
+        } else if(villZis > -510 && counter == 4){
+            villain.move(num);
+            increZ += -num;
+            villZis = increZ;
+        } else if(counter == 4 && villZis == -510){
+            villain.turn(-90); 
+            counter = 5;
+        } else if(villXis > 180 && counter == 5){
+            villain.move(num);
+            increX += -num;
+            villXis = increX;
+        } else if(counter == 5 && villXis == 180){
+            villain.turn(90); 
+            counter = 0;
+        }
+}
